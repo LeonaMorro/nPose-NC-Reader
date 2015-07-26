@@ -1,4 +1,4 @@
-// LSL script generated - patched Render.hs (0.1.6.2): DebuggingAndExamples.nPose NC Reader ~ DebugListener.lslp Sat Jul 25 11:15:27 Mitteleuropäische Sommerzeit 2015
+// LSL script generated - patched Render.hs (0.1.6.2): DebuggingAndExamples.nPose NC Reader ~ DebugListener.lslp Sun Jul 26 10:54:50 Mitteleuropäische Sommerzeit 2015
 
 
 debug(list message){

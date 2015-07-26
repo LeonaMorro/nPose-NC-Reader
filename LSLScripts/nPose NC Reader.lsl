@@ -1,4 +1,4 @@
-// LSL script generated - patched Render.hs (0.1.6.2): LSLScripts.nPose NC Reader.lslp Sat Jul 25 10:12:14 Mitteleuropäische Sommerzeit 2015
+// LSL script generated - patched Render.hs (0.1.6.2): LSLScripts.nPose NC Reader.lslp Sun Jul 26 10:54:50 Mitteleuropäische Sommerzeit 2015
 // The nPose scripts are licensed under the GPLv2 (http://www.gnu.org/licenses/gpl-2.0.txt), with the following addendum:
 //
 // The nPose scripts are free to be copied, modified, and redistributed, subject to the following conditions:
@@ -45,7 +45,7 @@ processResponseStack(){
         }
         integer index = llListFindList(cacheNcNames,[ncName]);
         if (~index) {
-            llMessageLinked(-1,llList2Integer(responseStack,4),llDumpList2String(llList2List(responseStack,0,2) + llList2String(cacheContent,index),NC_READER_CONTENT_SEPARATOR),llList2Key(responseStack,3));
+            llMessageLinked(-1,llList2Integer(responseStack,4),llDumpList2String(llList2List(responseStack,0,2),NC_READER_CONTENT_SEPARATOR) + llList2String(cacheContent,index),llList2Key(responseStack,3));
             responseStack = llDeleteSubList(responseStack,0,4);
             cacheNcNames = llDeleteSubList(cacheNcNames,index,index) + llList2List(cacheNcNames,index,index);
             cacheContent = llDeleteSubList(cacheContent,index,index) + llList2List(cacheContent,index,index);

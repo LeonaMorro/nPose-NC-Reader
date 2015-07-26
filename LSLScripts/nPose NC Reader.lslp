@@ -94,7 +94,7 @@ processResponseStack() {
 			llMessageLinked(
 				LINK_SET,
 				llList2Integer(responseStack, RESPONSE_STACK_TYPE),
-				llDumpList2String(llList2List(responseStack, 0, 2) + llList2String(cacheContent, index), NC_READER_CONTENT_SEPARATOR),
+				llDumpList2String(llList2List(responseStack, 0, 2), NC_READER_CONTENT_SEPARATOR) + llList2String(cacheContent, index),
 				llList2Key(responseStack, RESPONSE_STACK_AVATAR_KEY)
 			);
 			//we serverd the response, so we can delete it from the stack and check if there is more to do
