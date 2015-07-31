@@ -12,7 +12,7 @@
 // https://github.com/LeonaMorro/nPose-NC-Reader/issues
 // or IM slmember1 Resident (Leona)
 
-string NC_READER_CONTENT_SEPARATOR="℥";
+string NC_READER_CONTENT_SEPARATOR="%&§";
 integer MEMORY_TO_BE_USED=60000;
 
 integer DOPOSE=200;
@@ -62,7 +62,7 @@ checkMemory() {
 
 fetchNcContent(string str, key id, integer type) {
 	//we can also use the expanded DOPOSE/DOACTIONS format:
-	//str (separated by "℥"): cardname, menuname, placeholder
+	//str (separated by NC_READER_CONTENT_SEPARATOR): cardname, menuname, placeholder
 	list parts=llParseStringKeepNulls(str, [NC_READER_CONTENT_SEPARATOR], []);
 	string ncName=llList2String(parts, 0);
 	string menuName=llList2String(parts, 1);
@@ -117,17 +117,17 @@ processResponseStack() {
 default {
 	link_message(integer sender, integer num, string str, key id) {
 		if(num==DOPOSE) {
-			//str (separated by "℥"): ncName, menuName, placeholder(currently not used)
+			//str (separated by NC_READER_CONTENT_SEPARATOR): ncName, menuName, placeholder(currently not used)
 			//id: toucher
 			fetchNcContent(str, id, DOPOSE_READER);
 		}
 		else if(num==DOACTIONS) {
-			//str (separated by "℥"): ncName, menuName, placeholder(currently not used)
+			//str (separated by NC_READER_CONTENT_SEPARATOR): ncName, menuName, placeholder(currently not used)
 			//id: toucher
 			fetchNcContent(str, id, DOACTION_READER);
 		}
 		else if(num==NC_READER_REQUEST) {
-			//str (separated by "℥"): cardname, userDefinedData1, userDefinedData2
+			//str (separated by NC_READER_CONTENT_SEPARATOR): cardname, userDefinedData1, userDefinedData2
 			//id: userDefinedKey
 			fetchNcContent(str, id, NC_READER_RESPONSE);
 		}
