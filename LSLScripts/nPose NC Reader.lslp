@@ -90,7 +90,7 @@ processResponseStack() {
 		if(~index) {
 			//The data is in the cache (and therefore valid and fully read) .. send the response
 			//data Format:
-			//str (separated by the CONTENT_SEPARATOR: ncName, menuName, placeholder(currently not used), content
+			//str (separated by the NC_READER_CONTENT_SEPARATOR: ncName, menuName, placeholder(currently not used), content
 			llMessageLinked(
 				LINK_SET,
 				llList2Integer(responseStack, RESPONSE_STACK_TYPE),
@@ -105,10 +105,18 @@ processResponseStack() {
 		}
 		else {
 			//we need to start the reader
-			cacheMiss++;
-			ncReadStackNcNames+=[ncName];
-			ncReadStack+=[llGetNotecardLine(ncName, 0), 0, ""];
-			return;
+			//sanity: check the presense of the nc once more. It should be almost impossible that the NC is deleted meanwhile, because
+			//if it is deleted, all the lists (esp. the responseStack) is also deleted in the changed event and we should not be here
+			if(llGetInventoryType(ncName) == INVENTORY_NOTECARD) {
+				cacheMiss++;
+				ncReadStackNcNames+=[ncName];
+				ncReadStack+=[llGetNotecardLine(ncName, 0), 0, ""];
+				return;
+			}
+			else {
+				//we should remove this entry from the response stack, even if we expect all the lists to be deleted in the expected changed event
+				responseStack=llDeleteSubList(responseStack, 0, RESPONSE_STACK_STRIDE - 1);
+			}
 		}
 	}
 	while(TRUE);
@@ -149,8 +157,20 @@ default {
 		integer ncReadStackIndex=llListFindList(ncReadStack, [queryid]);
 		if(~ncReadStackIndex) {
 			//its for us
-			checkMemory();
 			string ncName=llList2String(ncReadStackNcNames, ncReadStackIndex);
+			//do a sanity check: If the NC is deleted from the prims inventory while we read it, it may/will happen that the
+			//dataserver event from the last line reading will trigger BEFORE the changed event. This will lead to a
+			//shout on debug channel
+			if(llGetInventoryType(ncName) != INVENTORY_NOTECARD) {
+				//there should be a changed event inside the eventqueue, but nevertheless we clean up the stuff
+				cacheNcNames=[];
+				cacheContent=[];
+				ncReadStackNcNames=[];
+				ncReadStack=[];
+				responseStack=[];
+				return;
+			}
+			checkMemory();
 			if(data==EOF) {
 				//move the stuff to the cache and process the response stack
 				cacheNcNames+=ncName;
